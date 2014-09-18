@@ -5,7 +5,7 @@ module Timecrunch
       @notifier = notifier
     end
 
-    def start
+    def start!
       sleep(@minutes * 60)
       @notifier.notify!
     end
