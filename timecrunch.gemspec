@@ -9,6 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Chris Keathley"]
   spec.email         = ["spyc3r@gmail.com"]
   spec.summary       = %q{A timer for timing things that need timing}
+  spec.description   = %q{A basic timing application you can use from the command line}
   spec.homepage      = "https://github.com/spyc3r/timecrunch"
   spec.license       = "MIT"
 
