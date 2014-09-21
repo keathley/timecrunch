@@ -2,11 +2,14 @@ require 'timecrunch'
 
 describe Timecrunch::Timer do
   describe "#call" do
-    it "should call the notifier" do
-      notifier = double()
-      timer = Timecrunch::Timer.new({minutes: 1}, notifier)
+    it "should call all notifiers" do
+      notifiers = [double(), double()]
+      timer = Timecrunch::Timer.new({minutes: 1}, notifiers)
+      timer.notifiers << double()
       expect(timer).to receive(:sleep).with(60)
-      expect(notifier).to receive(:notify!)
+      timer.notifiers.each do |notifier|
+        expect(notifier).to receive(:notify!)
+      end
       timer.start!
     end
 

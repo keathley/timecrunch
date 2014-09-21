@@ -1,13 +1,15 @@
 module Timecrunch
   class Timer
-    def initialize(times, notifier)
-      @times =times
-      @notifier = notifier
+    attr_accessor :notifiers
+
+    def initialize(times, *notifiers)
+      @times = times
+      @notifiers = notifiers
     end
 
     def start!
       sleep(total_time)
-      @notifier.notify!
+      @notifiers.each { |notifier| notifier.notify! }
     end
 
     private
