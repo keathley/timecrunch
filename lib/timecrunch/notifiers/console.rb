@@ -1,6 +1,6 @@
 module Timecrunch
   module Notifiers
-    class ConsoleNotifier
+    class Console
       def notify!
         puts "Timer is done!"
       end

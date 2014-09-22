@@ -7,13 +7,10 @@ module Timecrunch
     option :s, :banner => "seconds"
     option :growl, :type => :boolean, :banner => "notification center"
     def start(minutes=0)
-      seconds = options[:s].to_i if options[:s]
+      seconds = options[:s].nil? ? 0 : options[:s].to_i
       minutes = minutes.to_i
-      times = {
-        :minutes => minutes,
-        :seconds => seconds,
-      }
-      timer = Timer.new(times, Notifiers::ConsoleNotifier.new)
+      timer = Timer.new(minutes: minutes, seconds: seconds)
+      timer.notifiers << Notifiers::Console.new
       timer.notifiers << Notifiers::NotificationCenter.new if options[:growl]
       timer.start!
     end
