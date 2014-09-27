@@ -22,18 +22,33 @@ describe "CLI" do
       end
     end
 
-    context "when the growl command is added" do
-      it "should send a console notification and a growl notification" do
-        timer = instance_double("Timer", notifiers: [])
-        console = double()
-        growl = double()
-        allow(Timecrunch::Notifiers::Console).to receive(:new) { console }
-        allow(Timecrunch::Notifiers::NotificationCenter).to receive(:new) { growl }
-        expect(Timecrunch::Timer).to receive(:new) { timer }
+    describe "specifying notifiers" do
+      let(:timer) { instance_double("Timer", notifiers: []) }
+      let(:console) { double() }
+      let(:notifier) { double() }
 
+      before do
+        allow(Timecrunch::Notifiers::Console).to receive(:new) { console }
+        expect(Timecrunch::Timer).to receive(:new) { timer }
         expect(timer).to receive(:start!)
-        Timecrunch::CLI.start(["start", "--growl"])
-        expect(timer.notifiers).to eq [console, growl]
+      end
+
+      context "when the growl command is added" do
+        it "should send a console notification and a growl notification" do
+          allow(Timecrunch::Notifiers::NotificationCenter).to receive(:new) {
+            notifier
+          }
+          Timecrunch::CLI.start(["start", "--growl"])
+          expect(timer.notifiers).to eq [console, notifier]
+        end
+      end
+
+      context "when the beep command is added" do
+        it "should send a console notification and beep" do
+          allow(Timecrunch::Notifiers::Beep).to receive(:new) { notifier }
+          Timecrunch::CLI.start(["start", "--beep"])
+          expect(timer.notifiers).to eq [console, notifier]
+        end
       end
     end
   end
