@@ -1,3 +1,5 @@
+require 'ruby-progressbar'
+
 module Timecrunch
   class Timer
     attr_accessor :notifiers
@@ -8,11 +10,21 @@ module Timecrunch
     end
 
     def start!
-      sleep(total_time)
+      @formatter = ProgressBar.create(title: "Time", total: total_time)
+      tick(total_time) do
+        @formatter.increment
+      end
       @notifiers.each { |notifier| notifier.notify! }
     end
 
     private
+
+    def tick(total_times)
+      total_times.times do
+        sleep(1)
+        yield
+      end
+    end
 
     def total_time
       minutes + seconds
